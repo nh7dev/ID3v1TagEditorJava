@@ -12,8 +12,8 @@ import java.nio.file.StandardOpenOption;
 public class ID3v1TagEditor {
 
     public ID3v1Tags readID3v1Tags(File file) throws IOException {
-        OpenOption[] openOptions = {StandardOpenOption.READ};
-        FileChannel channel = FileChannel.open(file.toPath(), openOptions);
+        RandomAccessFile randomAccessFile = new RandomAccessFile(file, "r");
+        FileChannel channel = randomAccessFile.getChannel();
 
         boolean hasTag = hasID3v1Tag(channel);
         if (!hasTag) {
@@ -48,8 +48,8 @@ public class ID3v1TagEditor {
     }
 
     public void writeID3v1Tags(File file, ID3v1Tags tags) throws IOException {
-        OpenOption[] openOptions = {StandardOpenOption.READ, StandardOpenOption.WRITE};
-        FileChannel channel = FileChannel.open(file.toPath(), openOptions);
+        RandomAccessFile randomAccessFile = new RandomAccessFile(file, "rw");
+        FileChannel channel = randomAccessFile.getChannel();
 
         if (!hasID3v1Tag(channel)) {
             channel.position(channel.size());
